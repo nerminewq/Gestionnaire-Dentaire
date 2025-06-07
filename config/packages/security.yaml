@@ -1,0 +1,58 @@
+security:
+    encoders:
+        App\Entity\User:
+            algorithm: auto
+
+    # https://symfony.com/doc/4.4/security.html#where-do-users-come-from-user-providers
+    providers:
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: lazy
+            provider: app_user_provider
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                csrf_token_generator: security.csrf.token_manager
+                default_target_path: app_home
+                username_parameter: email
+                password_parameter: password
+            logout:
+                path: app_logout
+                target: app_login
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800 # 1 semaine
+                path: /
+                
+            # Redirection en cas d'accès refusé
+            access_denied_handler: App\Security\AccessDeniedHandler
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^/connexion, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/inscription, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/acces-refuse, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/profil, roles: ROLE_USER }
+        - { path: ^/patient, roles: [ROLE_DENTISTE, ROLE_SECRETAIRE] }
+        - { path: ^/rendezvous, roles: [ROLE_DENTISTE, ROLE_SECRETAIRE] }
+        - { path: ^/traitement, roles: ROLE_DENTISTE }
+        - { path: ^/facture, roles: [ROLE_DENTISTE, ROLE_SECRETAIRE] }
+        - { path: ^/admin, roles: ROLE_ADMIN }
+
+    role_hierarchy:
+        ROLE_SECRETAIRE: ROLE_USER
+        ROLE_DENTISTE: ROLE_USER
+        ROLE_ADMIN: [ROLE_DENTISTE, ROLE_SECRETAIRE]

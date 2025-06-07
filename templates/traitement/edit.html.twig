@@ -1,0 +1,298 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Traitement - Cabinet Dentaire{% endblock %}
+
+{% block body %}
+<div class="container-fluid dental-container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card dental-card shadow-sm border-0 animated fadeIn">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="h4 mb-0">
+                            <i class="fas fa-edit mr-2"></i>Modifier Traitement
+                        </h2>
+                        <a href="{{ path('traitement_index') }}" class="btn btn-light btn-sm dental-btn pulse-on-hover">
+                            <i class="fas fa-arrow-left mr-1"></i> Retour
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    {{ form_start(form, {'attr': {'class': 'needs-validation dental-form', 'novalidate': 'novalidate'}}) }}
+                    
+                    <div class="row">
+                        <div class="col-md-6 animated fadeInLeft">
+                            <div class="form-group">
+                                {{ form_label(form.description) }}
+                                {{ form_widget(form.description, {'attr': {'class': 'form-control dental-input', 'rows': 4}}) }}
+                                <div class="invalid-feedback">
+                                    Veuillez saisir une description valide.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 animated fadeInRight">
+                            <div class="form-group">
+                                {{ form_label(form.cout) }}
+                                <div class="input-group">
+                                    {{ form_widget(form.cout, {'attr': {'class': 'form-control dental-input'}}) }}
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">€</span>
+                                    </div>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Veuillez saisir un montant valide.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 animated fadeInLeft delay-1">
+                            <div class="form-group">
+                                {{ form_label(form.dateTraitement) }}
+                                {{ form_widget(form.dateTraitement, {'attr': {'class': 'form-control dental-input datepicker'}}) }}
+                                <div class="invalid-feedback">
+                                    Veuillez sélectionner une date valide.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 animated fadeInRight delay-1">
+                            <div class="form-group">
+                                {{ form_label(form.patient) }}
+                                {{ form_widget(form.patient, {'attr': {'class': 'form-control dental-input select2'}}) }}
+                                <div class="invalid-feedback">
+                                    Veuillez sélectionner un patient.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {% if form.statut is defined %}
+                        <div class="col-md-6 animated fadeInLeft delay-2">
+                            <div class="form-group">
+                                {{ form_label(form.statut) }}
+                                {{ form_widget(form.statut, {'attr': {'class': 'form-control dental-input'}}) }}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if form.notes is defined %}
+                        <div class="col-md-6 animated fadeInRight delay-2">
+                            <div class="form-group">
+                                {{ form_label(form.notes) }}
+                                {{ form_widget(form.notes, {'attr': {'class': 'form-control dental-input'}}) }}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mt-4">
+                        <button type="submit" class="btn btn-primary dental-submit-btn mr-2 scale-on-hover">
+                            <i class="fas fa-save mr-1"></i> {{ button_label|default('Mettre à jour') }}
+                        </button>
+                        <button type="reset" class="btn btn-outline-secondary dental-reset-btn scale-on-hover">
+                            <i class="fas fa-undo mr-1"></i> Réinitialiser
+                        </button>
+                    </div>
+                    
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Formulaire de suppression -->
+<div class="mt-3 text-center animated fadeIn delay-1">
+    <form method="post" action="{{ path('traitement_delete', {'id': traitement.id}) }}" 
+          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce traitement ?');"
+          class="d-inline">
+        <input type="hidden" name="_method" value="DELETE">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ traitement.id) }}">
+        <button class="btn btn-outline-danger dental-delete-btn scale-on-hover">
+            <i class="fas fa-trash-alt mr-1"></i> Supprimer ce traitement
+        </button>
+    </form>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .dental-container {
+            padding: 2rem;
+        }
+        
+        .dental-card {
+            border-radius: 10px;
+            overflow: hidden;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .dental-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .dental-btn {
+            border-radius: 20px;
+            padding: 0.375rem 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .dental-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .dental-input {
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            padding: 10px;
+        }
+        
+        .dental-input:focus {
+            border-color: #1a6fc9;
+            box-shadow: 0 0 0 0.2rem rgba(26, 111, 201, 0.25);
+        }
+        
+        .dental-submit-btn {
+            border-radius: 8px;
+            padding: 10px 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background-color: #1a6fc9;
+            border: none;
+        }
+        
+        .dental-submit-btn:hover {
+            background-color: #155a9e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(26, 111, 201, 0.3);
+        }
+        
+        .dental-reset-btn {
+            border-radius: 8px;
+            padding: 10px 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .dental-reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .dental-delete-btn {
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid #dc3545;
+            color: #dc3545;
+        }
+        
+        .dental-delete-btn:hover {
+            background-color: #dc3545;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+        }
+        
+        .input-group-text {
+            background-color: #e9ecef;
+            border: 1px solid #ced4da;
+        }
+        
+        /* Animations personnalisées */
+        .delay-1 {
+            animation-delay: 0.3s;
+        }
+        
+        .delay-2 {
+            animation-delay: 0.6s;
+        }
+        
+        .pulse-on-hover:hover {
+            animation: pulse 0.5s;
+        }
+        
+        .scale-on-hover:hover {
+            transform: scale(1.05);
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Animation pour les champs invalides */
+        .is-invalid {
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            // Validation du formulaire
+            (function() {
+                'use strict';
+                
+                var forms = document.querySelectorAll('.needs-validation');
+                
+                Array.prototype.slice.call(forms).forEach(function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            
+                            // Animation pour les champs invalides
+                            var invalidFields = form.querySelectorAll(':invalid');
+                            invalidFields.forEach(function(field) {
+                                field.classList.add('is-invalid');
+                                setTimeout(function() {
+                                    field.classList.remove('is-invalid');
+                                }, 500);
+                            });
+                        }
+                        
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            })();
+            
+            // Initialisation des sélecteurs de date
+            $('.datepicker').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                todayHighlight: true
+            });
+            
+            // Initialisation de Select2 pour les patients
+            $('.select2').select2({
+                placeholder: "Sélectionnez un patient",
+                allowClear: true
+            });
+            
+            // Animation au focus des champs
+            $('.dental-input').focus(function() {
+                $(this).parent().addClass('animated pulse');
+            }).blur(function() {
+                $(this).parent().removeClass('animated pulse');
+            });
+        });
+    </script>
+{% endblock %}

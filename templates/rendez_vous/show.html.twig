@@ -1,0 +1,142 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rendez-vous du {{ rendez_vou.dateRdv ? rendez_vou.dateRdv|date('d/m/Y') : '' }} à {{ rendez_vou.heureRdv ? rendez_vou.heureRdv|date('H:i') : '' }} - Cabinet Dentaire{% endblock %}
+
+{% block body %}
+<div class="container-fluid dental-container animated fadeIn">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card dental-card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="h4 mb-0">
+                            <i class="far fa-calendar-check mr-2"></i>Détails du Rendez-vous
+                        </h2>
+                        <a href="{{ path('rendezvous_index') }}" class="btn btn-light btn-sm dental-btn">
+                            <i class="fas fa-arrow-left mr-1"></i> Retour
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 animated fadeInLeft">
+                            <div class="dental-info-card mb-4">
+                                <h5><i class="far fa-calendar-alt text-primary mr-2"></i> Date</h5>
+                                <p>{{ rendez_vou.dateRdv ? rendez_vou.dateRdv|date('d/m/Y') : 'Non spécifiée' }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 animated fadeInRight">
+                            <div class="dental-info-card mb-4">
+                                <h5><i class="far fa-clock text-primary mr-2"></i> Heure</h5>
+                                <p>{{ rendez_vou.heureRdv ? rendez_vou.heureRdv|date('H:i') : 'Non spécifiée' }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 animated fadeInLeft delay-1">
+                            <div class="dental-info-card mb-4">
+                                <h5><i class="fas fa-user-injured text-primary mr-2"></i> Patient</h5>
+                                <p>
+                                    {% if rendez_vou.patient %}
+                                        <a href="{{ path('patient_show', {'id': rendez_vou.patient.id}) }}" class="text-primary">
+                                            {{ rendez_vou.patient.prenom }} {{ rendez_vou.patient.nom }}
+                                        </a>
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 animated fadeInRight delay-1">
+                            <div class="dental-info-card mb-4">
+                                <h5><i class="fas fa-tag text-primary mr-2"></i> Statut</h5>
+                                <p>
+                                    <span class="badge badge-{{ rendez_vou.statut == 'Confirmé' ? 'success' : (rendez_vou.statut == 'Annulé' ? 'danger' : 'warning') }}">
+                                        {{ rendez_vou.statut }}
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        {% if rendez_vou.motif %}
+                        <div class="col-12 animated fadeInUp delay-2">
+                            <div class="dental-info-card">
+                                <h5><i class="fas fa-comment-medical text-primary mr-2"></i> Motif</h5>
+                                <p class="mb-0">{{ rendez_vou.motif|nl2br }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <div>
+                            <a href="{{ path('rendezvous_edit', {'id': rendez_vou.id}) }}" 
+                               class="btn btn-primary dental-action-btn mr-2">
+                                <i class="fas fa-edit mr-1"></i> Modifier
+                            </a>
+                            <a href="{{ path('rendezvous_index') }}" 
+                               class="btn btn-outline-secondary dental-action-btn">
+                                <i class="fas fa-list mr-1"></i> Liste des RDV
+                            </a>
+                        </div>
+                        <div>
+                            {{ include('rendez_vous/delete.html.twig') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* All your existing styles remain exactly the same */
+        
+        /* Only the delete button styling is updated */
+        .delete-form {
+            display: inline-block;
+        }
+        
+        .delete-form button {
+            border-radius: 8px;
+            padding: 0.5rem 1.25rem;
+            font-weight: 500;
+            background-color: #dc3545;
+            border: none;
+            color: white;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .delete-form button:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+        }
+        
+        .delete-form button i {
+            margin-right: 8px;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            // Animation au survol des cartes d'info
+            $('.dental-info-card').hover(
+                function() {
+                    $(this).addClass('animated pulse');
+                },
+                function() {
+                    $(this).removeClass('animated pulse');
+                }
+            );
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,242 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau Rendez-vous - Cabinet Dentaire{% endblock %}
+
+{% block body %}
+<div class="container-fluid dental-container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card dental-card shadow-sm border-0 animated fadeIn">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="h4 mb-0">
+                            <i class="far fa-calendar-plus mr-2"></i>Planifier un rendez-vous
+                        </h2>
+                        <a href="{{ path('rendezvous_index') }}" class="btn btn-light btn-sm dental-btn">
+                            <i class="fas fa-arrow-left mr-1"></i> Retour
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    {{ form_start(form, {'attr': {'class': 'needs-validation dental-form', 'novalidate': 'novalidate'}}) }}
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group animated fadeInLeft">
+                                {{ form_label(form.dateRdv) }}
+                                {{ form_widget(form.dateRdv, {'attr': {'class': 'form-control dental-input datepicker'}}) }}
+                                <div class="invalid-feedback">
+                                    Veuillez sélectionner une date valide.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group animated fadeInRight">
+                                {{ form_label(form.heureRdv) }}
+                                {{ form_widget(form.heureRdv, {'attr': {'class': 'form-control dental-input timepicker'}}) }}
+                                <div class="invalid-feedback">
+                                    Veuillez sélectionner une heure valide.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group animated fadeInLeft delay-1">
+                                {{ form_label(form.patient) }}
+                                {{ form_widget(form.patient, {'attr': {'class': 'form-control dental-input select2'}}) }}
+                                <div class="invalid-feedback">
+                                    Veuillez sélectionner un patient.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {% if form.motif is defined %}
+                        <div class="col-md-6">
+                            <div class="form-group animated fadeInRight delay-1">
+                                {{ form_label(form.motif) }}
+                                {{ form_widget(form.motif, {'attr': {'class': 'form-control dental-input'}}) }}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if form.notes is defined %}
+                        <div class="col-12">
+                            <div class="form-group animated fadeInUp delay-2">
+                                {{ form_label(form.notes) }}
+                                {{ form_widget(form.notes, {'attr': {'class': 'form-control dental-input', 'rows': 3}}) }}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-flex justify-content-end mt-4">
+                        <button type="submit" class="btn btn-primary dental-submit-btn mr-2">
+                            <i class="far fa-save mr-1"></i> Planifier
+                        </button>
+                        <button type="reset" class="btn btn-outline-secondary dental-reset-btn">
+                            <i class="fas fa-undo mr-1"></i> Réinitialiser
+                        </button>
+                    </div>
+                    
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .dental-container {
+            padding: 2rem;
+        }
+        
+        .dental-card {
+            border-radius: 10px;
+            overflow: hidden;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .dental-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .dental-btn {
+            border-radius: 20px;
+            padding: 0.375rem 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .dental-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .dental-input {
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            padding: 10px;
+        }
+        
+        .dental-input:focus {
+            border-color: #1a6fc9;
+            box-shadow: 0 0 0 0.2rem rgba(26, 111, 201, 0.25);
+        }
+        
+        .dental-submit-btn {
+            border-radius: 8px;
+            padding: 10px 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background-color: #1a6fc9;
+            border: none;
+        }
+        
+        .dental-submit-btn:hover {
+            background-color: #155a9e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(26, 111, 201, 0.3);
+        }
+        
+        .dental-reset-btn {
+            border-radius: 8px;
+            padding: 10px 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .dental-reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Animations personnalisées */
+        .animated.delay-1 {
+            animation-delay: 0.2s;
+        }
+        
+        .animated.delay-2 {
+            animation-delay: 0.4s;
+        }
+        
+        /* Animation pour les champs invalides */
+        .is-invalid {
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            // Validation du formulaire
+            (function() {
+                'use strict';
+                
+                var forms = document.querySelectorAll('.needs-validation');
+                
+                Array.prototype.slice.call(forms).forEach(function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            
+                            // Animation pour les champs invalides
+                            var invalidFields = form.querySelectorAll(':invalid');
+                            invalidFields.forEach(function(field) {
+                                field.classList.add('is-invalid');
+                                setTimeout(function() {
+                                    field.classList.remove('is-invalid');
+                                }, 500);
+                            });
+                        }
+                        
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            })();
+            
+            // Animation au focus des champs
+            $('.dental-input').focus(function() {
+                $(this).parent().addClass('animated pulse');
+            }).blur(function() {
+                $(this).parent().removeClass('animated pulse');
+            });
+            
+            // Initialisation des sélecteurs de date/heure
+            $('.datepicker').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                todayHighlight: true,
+                startDate: new Date()
+            });
+            
+            $('.timepicker').timepicker({
+                minuteStep: 15,
+                showMeridian: false,
+                defaultTime: '08:00'
+            });
+            
+            // Initialisation de Select2 pour les patients
+            $('.select2').select2({
+                placeholder: "Sélectionnez un patient",
+                allowClear: true
+            });
+        });
+    </script>
+{% endblock %}

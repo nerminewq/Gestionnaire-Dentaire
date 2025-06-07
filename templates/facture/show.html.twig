@@ -1,0 +1,281 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la Facture {{ facture.numeroFacture }} - Cabinet Dentaire{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+    <style>
+        .dental-container {
+            padding: 2rem;
+        }
+        
+        .dental-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: none;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #1a6fc9, #63a4ff);
+            color: white;
+            border-bottom: none;
+            padding: 1.25rem 1.5rem;
+        }
+        
+        .card-title {
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+        
+        .dental-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        
+        .dental-table th {
+            background-color: #f8f9fa;
+            color: #495057;
+            font-weight: 600;
+            padding: 1rem;
+            border-bottom: 2px solid #e9ecef;
+            width: 30%;
+        }
+        
+        .dental-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e9ecef;
+            vertical-align: top;
+        }
+        
+        .dental-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .dental-table tr:hover td {
+            background-color: #f8f9fa;
+        }
+        
+        .badge-paid {
+            background-color: #28a745;
+            color: white;
+            padding: 0.35em 0.65em;
+            border-radius: 50rem;
+            font-weight: 600;
+        }
+        
+        .badge-unpaid {
+            background-color: #dc3545;
+            color: white;
+            padding: 0.35em 0.65em;
+            border-radius: 50rem;
+            font-weight: 600;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        
+        .dental-btn {
+            border-radius: 20px;
+            padding: 0.5rem 1.25rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .dental-btn i {
+            margin-right: 8px;
+        }
+        
+        .dental-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        
+        .btn-warning {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-primary {
+            background-color: #1a6fc9;
+            border-color: #1a6fc9;
+        }
+        
+        .treatment-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+        
+        .treatment-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed #e9ecef;
+        }
+        
+        .treatment-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .amount-highlight {
+            font-weight: 700;
+            color: #1a6fc9;
+            font-size: 1.1em;
+        }
+        
+        /* Delete button styling (without changing functionality) */
+        .delete-form {
+            display: inline-block;
+        }
+        
+        .delete-form button {
+            border-radius: 20px;
+            padding: 0.5rem 1.25rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        @media (max-width: 768px) {
+            .dental-table th, 
+            .dental-table td {
+                padding: 0.75rem 0.5rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .action-buttons .btn,
+            .delete-form button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid dental-container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card dental-card mb-4">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="card-title mb-0">
+                            <i class="fas fa-file-invoice-dollar mr-2"></i>
+                            Détails de la Facture #{{ facture.numeroFacture }}
+                        </h2>
+                        <span class="badge {% if facture.statutPaiement == 'Payé' %}badge-paid{% else %}badge-unpaid{% endif %}">
+                            {{ facture.statutPaiement }}
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <table class="dental-table">
+                        <tbody>
+                            <tr>
+                                <th>Référence</th>
+                                <td>{{ facture.id }}</td>
+                            </tr>
+                            <tr>
+                                <th>Numéro de Facture</th>
+                                <td>{{ facture.numeroFacture }}</td>
+                            </tr>
+                            <tr>
+                                <th>Date de Facture</th>
+                                <td>{{ facture.dateFacture ? facture.dateFacture|date('d/m/Y') : 'N/A' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Patient</th>
+                                <td>
+                                    {% if facture.patient %}
+                                        <i class="fas fa-user mr-2"></i>
+                                        {{ facture.patient.prenom }} {{ facture.patient.nom }}
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Montant Total</th>
+                                <td class="amount-highlight">{{ facture.montantTotal|number_format(2, ',', ' ') }} €</td>
+                            </tr>
+                            <tr>
+                                <th>Traitements Associés</th>
+                                <td>
+                                    {% if facture.traitements is not empty %}
+                                        <ul class="treatment-list">
+                                        {% for traitement in facture.traitements %}
+                                            <li>
+                                                <i class="fas fa-teeth-open mr-2"></i>
+                                                {{ traitement.description }} 
+                                                <span class="badge badge-light ml-2">{{ traitement.cout|number_format(2, ',', ' ') }} €</span>
+                                                <small class="text-muted ml-2">{{ traitement.dateTraitement ? traitement.dateTraitement|date('d/m/Y') : '' }}</small>
+                                            </li>
+                                        {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        <span class="text-muted">Aucun traitement associé</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <a href="{{ path('facture_index') }}" class="btn btn-secondary dental-btn">
+                    <i class="fas fa-arrow-left mr-1"></i> Retour à la liste
+                </a>
+                <a href="{{ path('facture_edit', {'id': facture.id}) }}" class="btn btn-warning dental-btn">
+                    <i class="fas fa-edit mr-1"></i> Modifier
+                </a>
+                {# Uncomment when print functionality is ready
+                <a href="{{ path('facture_print', {'id': facture.id}) }}" class="btn btn-primary dental-btn">
+                    <i class="fas fa-print mr-1"></i> Imprimer
+                </a>
+                #}
+                {{ include('facture/delete.html.twig') }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effects to all buttons
+            const buttons = document.querySelectorAll('.btn, .delete-form button');
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                    this.style.boxShadow = '';
+                });
+            });
+        });
+    </script>
+{% endblock %}

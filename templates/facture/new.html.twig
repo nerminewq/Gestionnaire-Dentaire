@@ -1,0 +1,213 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle Facture - Cabinet Dentaire{% endblock %}
+
+{% block body %}
+<div class="container-fluid dental-container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card dental-card">
+                <div class="card-header dental-card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="dental-card-title">
+                            <i class="fas fa-file-invoice-dollar mr-2"></i>Nouvelle Facture
+                        </h2>
+                        <a href="{{ path('facture_index') }}" class="btn dental-btn dental-btn-light">
+                            <i class="fas fa-arrow-left mr-1"></i> Retour
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    {{ form_start(form, {'attr': {'class': 'dental-form needs-validation', 'novalidate': 'novalidate'}}) }}
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(form.patient) }}
+                                {{ form_widget(form.patient, {'attr': {'class': 'form-control dental-input select2'}}) }}
+                                <div class="invalid-feedback">
+                                    Veuillez sélectionner un patient.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(form.dateFacture) }}
+                                {{ form_widget(form.dateFacture, {'attr': {'class': 'form-control dental-input datepicker'}}) }}
+                                <div class="invalid-feedback">
+                                    Veuillez sélectionner une date valide.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(form.statutPaiement) }}
+                                {{ form_widget(form.statutPaiement, {'attr': {'class': 'form-control dental-input'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(form.montantTotal) }}
+                                <div class="input-group">
+                                    {{ form_widget(form.montantTotal, {'attr': {'class': 'form-control dental-input'}}) }}
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">€</span>
+                                    </div>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Veuillez saisir un montant valide.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-end mt-4">
+                        <button type="submit" class="btn dental-btn dental-btn-primary mr-2">
+                            <i class="fas fa-save mr-1"></i> Enregistrer
+                        </button>
+                        <button type="reset" class="btn dental-btn dental-btn-secondary">
+                            <i class="fas fa-undo mr-1"></i> Réinitialiser
+                        </button>
+                    </div>
+                    
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        /* Base Container */
+        .dental-container {
+            padding: 2rem;
+        }
+        
+        /* Card Styling */
+        .dental-card {
+            border-radius: 8px;
+            border: none;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+        
+        .dental-card-header {
+            background: #1a6fc9;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-bottom: none;
+        }
+        
+        .dental-card-title {
+            font-size: 1.25rem;
+            margin-bottom: 0;
+            font-weight: 600;
+        }
+        
+        /* Form Elements */
+        .dental-form {
+            padding: 1rem;
+        }
+        
+        .dental-input {
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 0.75rem;
+            transition: border-color 0.2s;
+        }
+        
+        .dental-input:focus {
+            border-color: #1a6fc9;
+            box-shadow: 0 0 0 0.2rem rgba(26, 111, 201, 0.1);
+        }
+        
+        /* Buttons */
+        .dental-btn {
+            border-radius: 6px;
+            padding: 0.5rem 1.25rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: none;
+        }
+        
+        .dental-btn-light {
+            background: white;
+            color: #1a6fc9;
+        }
+        
+        .dental-btn-primary {
+            background: #1a6fc9;
+            color: white;
+        }
+        
+        .dental-btn-secondary {
+            background: #f8f9fa;
+            color: #495057;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .dental-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dental-btn-primary:hover {
+            background: #155a9e;
+        }
+        
+        /* Input Group */
+        .input-group-text {
+            background: #f8f9fa;
+            border-color: #e0e0e0;
+        }
+        
+        /* Validation */
+        .is-invalid {
+            border-color: #dc3545;
+        }
+        
+        .invalid-feedback {
+            color: #dc3545;
+            font-size: 0.85rem;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            // Form validation
+            $('.needs-validation').on('submit', function(e) {
+                if (!this.checkValidity()) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    $(this).find(':invalid').addClass('is-invalid');
+                }
+                
+                $(this).addClass('was-validated');
+            });
+            
+            // Date picker
+            $('.datepicker').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                todayHighlight: true,
+                startDate: new Date()
+            });
+            
+            // Select2 for patients
+            $('.select2').select2({
+                placeholder: "Sélectionnez un patient",
+                allowClear: true
+            });
+        });
+    </script>
+{% endblock %}

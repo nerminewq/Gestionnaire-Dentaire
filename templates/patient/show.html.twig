@@ -1,0 +1,196 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails Patient {{ patient.prenom }} {{ patient.nom }} - Cabinet Dentaire{% endblock %}
+
+{% block body %}
+<div class="container-fluid dental-container animate__animated animate__fadeIn">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card dental-card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="h4 mb-0">
+                            <i class="fas fa-user-circle me-2"></i>Détails du Patient
+                        </h2>
+                        <a href="{{ path('patient_index') }}" class="btn btn-light btn-sm dental-btn">
+                            <i class="fas fa-arrow-left me-1"></i> Retour
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-3 text-center animate__animated animate__fadeInLeft">
+                            <div class="dental-avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3">
+                                <i class="fas fa-user fa-2x"></i>
+                            </div>
+                            <h4 class="mb-0">{{ patient.prenom }} {{ patient.nom }}</h4>
+                            <small class="text-muted">ID: {{ patient.id }}</small>
+                        </div>
+                        <div class="col-md-9 animate__animated animate__fadeInRight">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="dental-info-card">
+                                        <h5><i class="fas fa-birthday-cake text-primary me-2"></i> Date de Naissance</h5>
+                                        <p>{{ patient.dateNaissance ? patient.dateNaissance|date('d/m/Y') : 'Non renseignée' }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="dental-info-card">
+                                        <h5><i class="fas fa-phone text-primary me-2"></i> Téléphone</h5>
+                                        <p>{{ patient.tel ?? 'Non renseigné' }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="dental-info-card">
+                                        <h5><i class="fas fa-envelope text-primary me-2"></i> Email</h5>
+                                        <p>{{ patient.email ?? 'Non renseigné' }}</p>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="dental-info-card">
+                                        <h5><i class="fas fa-map-marker-alt text-primary me-2"></i> Adresse</h5>
+                                        <p>{{ patient.adresse ?? 'Non renseignée' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end mt-4 animate__animated animate__fadeInUp">
+                        <a href="{{ path('patient_edit', {'id': patient.id}) }}" 
+                           class="btn btn-primary me-2 dental-action-btn"
+                           data-bs-toggle="tooltip" data-bs-placement="top" title="Modifier">
+                            <i class="fas fa-edit me-1"></i> Modifier
+                        </a>
+                        
+                        <button class="btn btn-outline-danger dental-action-btn" 
+                                data-bs-toggle="modal" data-bs-target="#deletePatientModal"
+                                data-bs-tooltip="tooltip" data-bs-placement="top" title="Supprimer">
+                            <i class="fas fa-trash-alt me-1"></i> Supprimer
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de suppression -->
+<div class="modal fade" id="deletePatientModal" tabindex="-1" aria-labelledby="deletePatientModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deletePatientModalLabel">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Confirmation de suppression
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir supprimer définitivement le patient <strong>{{ patient.prenom }} {{ patient.nom }}</strong> ?</p>
+                <p class="text-danger"><i class="fas fa-exclamation-circle me-2"></i>Cette action est irréversible !</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i> Annuler
+                </button>
+                 {{ include('patient/delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+    <style>
+        .dental-info-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--dental-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .dental-info-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .dental-info-card h5 {
+            color: var(--dental-primary);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .dental-info-card p {
+            margin-bottom: 0;
+            font-size: 1.1rem;
+        }
+        
+        .dental-avatar {
+            width: 100px;
+            height: 100px;
+            font-size: 2.5rem;
+        }
+        
+        .dental-action-btn {
+            border-radius: 8px;
+            padding: 8px 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .dental-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Animation spécifique pour la modal */
+        .modal.fade .modal-dialog {
+            transition: transform 0.3s ease-out, opacity 0.3s ease;
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+        
+        .modal.show .modal-dialog {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialiser les tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            // Animation au survol des cartes d'info
+            const infoCards = document.querySelectorAll('.dental-info-card');
+            infoCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.classList.add('animate__pulse');
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.classList.remove('animate__pulse');
+                });
+            });
+            
+            // Gestion de la modal de suppression
+            const deleteModal = document.getElementById('deletePatientModal');
+            if (deleteModal) {
+                deleteModal.addEventListener('show.bs.modal', function (event) {
+                    // Animation supplémentaire si nécessaire
+                });
+            }
+        });
+    </script>
+{% endblock %}

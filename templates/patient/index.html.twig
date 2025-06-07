@@ -1,0 +1,224 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Patients - Cabinet Dentaire{% endblock %}
+
+{% block body %}
+    <div class="container-fluid dental-container">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="text-center dental-heading animate__animated animate__fadeInDown">
+                    <i class="fas fa-user-injured me-2"></i>Gestion des Patients
+                </h1>
+                <p class="text-center text-muted animate__animated animate__fadeIn animate__delay-1s">
+                    Liste complète des patients du cabinet dentaire
+                </p>
+            </div>
+        </div>
+
+        <div class="row justify-content-center animate__animated animate__fadeIn animate__delay-1s">
+            <div class="col-md-10">
+                <div class="card dental-card shadow-sm border-0">
+                    <div class="card-header bg-primary text-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">
+                                <i class="fas fa-list me-2"></i>Patients enregistrés
+                            </h5>
+                            <a href="{{ path('patient_new') }}" class="btn btn-light btn-sm dental-btn">
+                                <i class="fas fa-plus-circle me-1"></i> Nouveau patient
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        {% for message in app.flashes('success') %}
+                            <div class="alert alert-success alert-dismissible fade show dental-alert" role="alert">
+                                <i class="fas fa-check-circle me-2"></i>{{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+
+                        <div class="table-responsive">
+                            <table class="table table-hover dental-table">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="dental-th">Nom</th>
+                                        <th class="dental-th">Prénom</th>
+                                        <th class="dental-th">Téléphone</th>
+                                        <th class="dental-th">Email</th>
+                                        <th class="dental-th text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for patient in patients %}
+                                    <tr class="animate__animated animate__fadeIn animate__delay-{{ loop.index * 0.1 }}s">
+                                        <td class="dental-td">{{ patient.nom }}</td>
+                                        <td class="dental-td">{{ patient.prenom }}</td>
+                                        <td class="dental-td">{{ patient.tel }}</td>
+                                        <td class="dental-td">{{ patient.email }}</td>
+                                        <td class="dental-td text-end">
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <a href="{{ path('patient_show', {'id': patient.id}) }}" 
+                                                   class="btn btn-outline-info dental-action-btn"
+                                                   data-bs-toggle="tooltip" data-bs-placement="top" title="Détails">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="{{ path('patient_edit', {'id': patient.id}) }}" 
+                                                   class="btn btn-outline-primary dental-action-btn"
+                                                   data-bs-toggle="tooltip" data-bs-placement="top" title="Modifier">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr class="animate__animated animate__fadeIn">
+                                        <td colspan="7" class="text-center py-4 text-muted">
+                                            <i class="fas fa-user-slash fa-2x mb-3"></i><br>
+                                            Aucun patient trouvé dans la base de données.
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    {% if patients|length > 5 %}
+                    <div class="card-footer bg-light">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle me-1"></i> {{ patients|length }} patients enregistrés
+                        </small>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+    <style>
+        :root {
+            --dental-primary: #1a6fc9;
+            --dental-secondary: #5dade2;
+            --dental-light: #eaf2f8;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .dental-container {
+            padding: 2rem;
+            max-width: 1400px;
+        }
+        
+        .dental-heading {
+            color: var(--dental-primary);
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .dental-card {
+            border-radius: 10px;
+            overflow: hidden;
+            border: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .dental-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .dental-btn {
+            border-radius: 20px;
+            padding: 0.375rem 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .dental-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .dental-table {
+            margin-bottom: 0;
+        }
+        
+        .dental-th {
+            font-weight: 600;
+            color: var(--dental-primary);
+            border-bottom: 2px solid var(--dental-secondary) !important;
+        }
+        
+        .dental-td {
+            vertical-align: middle;
+            border-color: var(--dental-light) !important;
+        }
+        
+        .dental-action-btn {
+            border-radius: 50% !important;
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .dental-action-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .dental-alert {
+            border-radius: 8px;
+            border-left: 5px solid var(--dental-primary);
+        }
+        
+        tr:hover {
+            background-color: rgba(26, 111, 201, 0.05);
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialiser les tooltips Bootstrap
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            // Animation pour les lignes du tableau au survol
+            const tableRows = document.querySelectorAll('.dental-table tbody tr');
+            tableRows.forEach(row => {
+                row.addEventListener('mouseenter', () => {
+                    row.classList.add('animate__pulse');
+                });
+                row.addEventListener('mouseleave', () => {
+                    row.classList.remove('animate__pulse');
+                });
+            });
+            
+            // Disparition automatique des alertes
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.classList.add('animate__fadeOut');
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 500);
+                }, 5000);
+            });
+        });
+    </script>
+{% endblock %}

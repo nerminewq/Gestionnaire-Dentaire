@@ -1,0 +1,218 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Patient {{ patient.prenom }} {{ patient.nom }} - Cabinet Dentaire{% endblock %}
+
+{% block body %}
+<div class="container-fluid dental-container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card dental-card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2 class="h4 mb-0">
+                            <i class="fas fa-user-edit mr-2"></i>Modifier Patient
+                        </h2>
+                        <a href="{{ path('patient_index') }}" class="btn btn-light btn-sm dental-btn">
+                            <i class="fas fa-arrow-left mr-1"></i> Retour
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    {{ form_start(form, {'attr': {'class': 'needs-validation dental-form', 'novalidate': 'novalidate'}}) }}
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(form.nom) }}
+                                {{ form_widget(form.nom, {'attr': {'class': 'form-control dental-input'}}) }}
+                                <div class="invalid-feedback">
+                                    Veuillez entrer le nom du patient.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(form.prenom) }}
+                                {{ form_widget(form.prenom, {'attr': {'class': 'form-control dental-input'}}) }}
+                                <div class="invalid-feedback">
+                                    Veuillez entrer le prénom du patient.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(form.tel) }}
+                                {{ form_widget(form.tel, {'attr': {'class': 'form-control dental-input'}}) }}
+                                <div class="invalid-feedback">
+                                    Veuillez entrer un numéro de téléphone valide.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(form.email) }}
+                                {{ form_widget(form.email, {'attr': {'class': 'form-control dental-input'}}) }}
+                                <div class="invalid-feedback">
+                                    Veuillez entrer une adresse email valide.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {% if form.dateNaissance is defined %}
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_label(form.dateNaissance) }}
+                                {{ form_widget(form.dateNaissance, {'attr': {'class': 'form-control dental-input'}}) }}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if form.adresse is defined %}
+                        <div class="col-12">
+                            <div class="form-group">
+                                {{ form_label(form.adresse) }}
+                                {{ form_widget(form.adresse, {'attr': {'class': 'form-control dental-input', 'rows': 3}}) }}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mt-4">
+                        <div>
+                            <button type="submit" class="btn btn-primary dental-submit-btn mr-2">
+                                <i class="fas fa-save mr-1"></i> {{ button_label|default('Mettre à jour') }}
+                            </button>
+                            <button type="reset" class="btn btn-outline-secondary dental-reset-btn">
+                                <i class="fas fa-undo mr-1"></i> Réinitialiser
+                            </button>
+                        </div>
+                    </div>
+                    
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+    <style>
+        .dental-form {
+            padding: 20px;
+        }
+        
+        .dental-input {
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            padding: 10px;
+        }
+        
+        .dental-input:focus {
+            border-color: #1a6fc9;
+            box-shadow: 0 0 0 0.2rem rgba(26, 111, 201, 0.25);
+        }
+        
+        .dental-submit-btn {
+            border-radius: 8px;
+            padding: 10px 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            background-color: #1a6fc9;
+            cursor: pointer; /* Curseur en forme de main */
+        }
+        
+        .dental-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(26, 111, 201, 0.3);
+            background-color: #155a9e;
+        }
+        
+        .dental-reset-btn {
+            border-radius: 8px;
+            padding: 10px 25px;
+            transition: all 0.3s ease;
+            cursor: pointer; /* Curseur en forme de main */
+        }
+        
+        .dental-reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Animation pour les champs invalides */
+        .is-invalid {
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        /* Style pour le bouton Retour */
+        .dental-btn {
+            border-radius: 20px;
+            padding: 0.375rem 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer; /* Curseur en forme de main */
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Validation du formulaire
+            (function() {
+                'use strict'
+                
+                const forms = document.querySelectorAll('.needs-validation')
+                
+                Array.from(forms).forEach(form => {
+                    form.addEventListener('submit', event => {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                            
+                            // Ajout d'animation aux champs invalides
+                            const invalidFields = form.querySelectorAll(':invalid')
+                            invalidFields.forEach(field => {
+                                field.classList.add('is-invalid')
+                                setTimeout(() => {
+                                    field.classList.remove('is-invalid')
+                                }, 500)
+                            })
+                        }
+                        
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+            })()
+            
+            // Animation au focus des champs
+            const inputs = document.querySelectorAll('.dental-input')
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.style.borderColor = '#1a6fc9';
+                    this.style.boxShadow = '0 0 0 0.2rem rgba(26, 111, 201, 0.25)';
+                })
+                input.addEventListener('blur', function() {
+                    this.style.borderColor = '#ced4da';
+                    this.style.boxShadow = 'none';
+                })
+            })
+        })
+    </script>
+{% endblock %}

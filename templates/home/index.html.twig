@@ -1,0 +1,143 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - Cabinet Dentaire{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        .dental-hero {
+            background: linear-gradient(rgba(26, 111, 201, 0.85), rgba(26, 111, 201, 0.85)),
+                        url('https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 6rem 2rem;
+            margin-bottom: 0;
+            border-radius: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dental-hero:after {
+            content: "";
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='1' d='M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") center/cover;
+        }
+
+        .dental-hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .dental-hero p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+
+        .dental-features {
+            padding: 4rem 0;
+            background: white;
+        }
+
+        .feature-card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: #1a6fc9;
+            margin-bottom: 1rem;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="dental-hero text-center animate__animated animate__fadeIn">
+    <div class="container">
+        <h1 class="animate__animated animate__fadeInDown">Bienvenue au Cabinet Dentaire</h1>
+        <p class="animate__animated animate__fadeIn animate__delay-1s">Votre solution complète de gestion des patients et rendez-vous</p>
+        <a href="{{ path('patient_index') }}" class="btn btn-light btn-lg mt-3 animate__animated animate__fadeInUp animate__delay-2s">
+            <i class="fas fa-sign-in-alt mr-2"></i> Commencer
+        </a>
+    </div>
+</div>
+
+<div class="dental-features">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 animate__animated animate__fadeInLeft">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-injured"></i>
+                        </div>
+                        <h3>Gestion des Patients</h3>
+                        <p>Enregistrez et gérez facilement les dossiers de vos patients avec toutes les informations nécessaires.</p>
+                        <a href="{{ path('patient_index') }}" class="btn btn-outline-primary">Voir les patients</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 animate__animated animate__fadeInUp">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center">
+                        <div class="feature-icon">
+                            <i class="far fa-calendar-check"></i>
+                        </div>
+                        <h3>Rendez-vous</h3>
+                        <p>Planifiez et suivez les rendez-vous de vos patients avec un système intuitif et efficace.</p>
+                        <a href="{{ path('rendezvous_index') }}" class="btn btn-outline-primary">Voir les RDV</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 animate__animated animate__fadeInRight">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-teeth"></i>
+                        </div>
+                        <h3>Traitements</h3>
+                        <p>Suivez les traitements effectués et les procédures dentaires pour chaque patient.</p>
+                        <a href="{{ path('traitement_index') }}" class="btn btn-outline-primary">Voir les traitements</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function() {
+            // Animation au survol des cartes
+            $('.feature-card').hover(
+                function() {
+                    $(this).addClass('animate__animated animate__pulse');
+                },
+                function() {
+                    $(this).removeClass('animate__animated animate__pulse');
+                }
+            );
+        });
+    </script>
+{% endblock %}
